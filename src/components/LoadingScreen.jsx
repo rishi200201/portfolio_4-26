@@ -5,6 +5,11 @@ export const LoadingScreen = ({ onComplete }) => {
   const fullText = "<hello world/>";
 
   useEffect(() => {
+    // Faster loading on mobile devices
+    const isMobile = window.innerWidth < 768;
+    const typingSpeed = isMobile ? 50 : 80;
+    const finalDelay = isMobile ? 300 : 600;
+
     let index = 0;
     const interval = setInterval(() => {
       setText(fullText.substring(0, index));
@@ -15,9 +20,9 @@ export const LoadingScreen = ({ onComplete }) => {
 
         setTimeout(() => {
           onComplete();
-        }, 1000);
+        }, finalDelay);
       }
-    }, 100);
+    }, typingSpeed);
 
     return () => clearInterval(interval);
   }, [onComplete]);

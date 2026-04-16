@@ -31,14 +31,15 @@ export const Navbar = ({ menuOpen, setMenuOpen, onResumeOpen }) => {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-40 transition-all duration-300 ${
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         scrolled
           ? "bg-white shadow-[0_1px_24px_rgba(0,0,0,0.08)] border-b border-gray-100"
-          : "bg-white/90 backdrop-blur-xl border-b border-gray-100/60"
+          : "bg-white/95 backdrop-blur-xl border-b border-gray-100/60"
       }`}
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex justify-between items-center h-[70px]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-[60px] sm:h-[70px]">
 
           {/* ── Logo ── */}
           <a href="#home" className="flex items-center gap-2 group">
@@ -53,7 +54,7 @@ export const Navbar = ({ menuOpen, setMenuOpen, onResumeOpen }) => {
 
           {/* ── Hamburger — Mobile ── */}
           <button
-            className="md:hidden w-10 h-10 flex items-center justify-center text-gray-600 hover:text-[#DC2626] transition-colors duration-300 z-40"
+            className="md:hidden w-11 h-11 flex items-center justify-center text-gray-600 hover:text-[#DC2626] active:scale-95 transition-all duration-300 relative z-50 touch-manipulation"
             onClick={() => setMenuOpen((p) => !p)}
             aria-label="Toggle menu"
           >
