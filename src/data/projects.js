@@ -72,6 +72,17 @@ export const projects = [
     url: "http://re-ch113.vercel.app/",
     badge: "Hosted",
   },
+{
+  title: "Sivakami Iyarkai Suvai",
+  description:
+    "A clean and elegant website showcasing natural and traditional food products, highlighting offerings, brand story, and contact details.",
+  technologies: ["React", "TailwindCSS", "Vercel"],
+  gradient: "from-green-500 to-emerald-600",
+  iconType: "leaf",
+  url: "https://sivakamiiyarkaisuvai.vercel.app/",
+  badge: "Hosted",
+},
+
   // ── Personal / concept projects ──────────────────────────────────────
   {
     title: "Birthday Cards Portfolio",
