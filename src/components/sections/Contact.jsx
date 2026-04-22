@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { RevealOnScroll } from "../RevealOnScroll";
+import { AvailabilityCalendar } from "../AvailabilityCalendar";
 
 const WHATSAPP_NUMBER = "918248568354";
 const EMAIL = "rishi20020107@gmail.com";
@@ -7,10 +8,7 @@ const ADDRESS = "40, Thiruveethi Amman Koil Street, Kalikundram, Tharamani, Chen
 const MAPS_EMBED =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.3220497755434!2d80.23879!3d12.99240!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5267e9925b8acd%3A0x1!2sThiruveethi+Amman+Koil+Street%2C+Tharamani%2C+Chennai%2C+Tamil+Nadu+600113!5e0!3m2!1sen!2sin!4v1713000000000";
 
-const TIME_SLOTS = ["09:00 AM", "11:00 AM", "01:00 PM", "03:00 PM", "05:00 PM", "07:00 PM"];
 const PROJECT_TYPES = ["Business Website", "Full-Stack Web App", "Admin Portal / Dashboard", "E-Commerce Store", "API / Integration", "Other"];
-
-function getTodayStr() { return new Date().toISOString().split("T")[0]; }
 
 function buildWhatsAppMessage({ name, email, projectType, date, time, brief }) {
   return encodeURIComponent(
@@ -24,14 +22,13 @@ export const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", projectType: "", date: "", time: "", brief: "" });
   const [errors, setErrors]     = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [emailCopied, setEmailCopied] = useState(false);
 
   const validate = () => {
     const e = {};
     if (!formData.name.trim() || formData.name.trim().length < 2) e.name = "Full name is required";
     if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) e.email = "Valid email is required";
     if (!formData.projectType) e.projectType = "Please select a project type";
-    if (!formData.date) e.date = "Preferred date is required";
-    if (!formData.time) e.time = "Please pick a time slot";
     if (!formData.brief.trim()) e.brief = "Please describe your project";
     setErrors(e);
     return Object.keys(e).length === 0;
@@ -40,6 +37,11 @@ export const Contact = () => {
   const handleChange = (field, value) => {
     setFormData((p) => ({ ...p, [field]: value }));
     if (errors[field]) setErrors((p) => ({ ...p, [field]: "" }));
+  };
+
+  const handleCalendarSelect = (date, time) => {
+    handleChange("date", date);
+    if (time) handleChange("time", time);
   };
 
   const handleSubmit = (e) => {
@@ -138,9 +140,10 @@ export const Contact = () => {
             </div>
 
             {/* ── Main layout: Form + Sidebar ── */}
-            <div className="grid lg:grid-cols-[1fr_340px] gap-7">
+            <div className="grid lg:grid-cols-[1fr_360px] gap-7 items-start">
 
-              {/* FORM */}
+              {/* FORM + WHAT TO EXPECT */}
+              <div className="flex flex-col gap-7">
               <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
                 {/* Card header */}
                 <div className="flex items-center justify-between px-7 py-5 border-b border-gray-100">
@@ -203,34 +206,6 @@ export const Contact = () => {
                     <Err k="projectType" />
                   </div>
 
-                  {/* Date + Time */}
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <Label>Preferred Date</Label>
-                      <input type="date" id="date" value={formData.date} min={getTodayStr()}
-                        onChange={(e) => handleChange("date", e.target.value)}
-                        className={`${base} cursor-pointer ${errors.date ? borderError : borderNormal}`}
-                        aria-invalid={!!errors.date}
-                      />
-                      <Err k="date" />
-                    </div>
-                    <div>
-                      <Label>Time Slot (IST)</Label>
-                      <div className="grid grid-cols-3 gap-1.5">
-                        {TIME_SLOTS.map((slot) => (
-                          <button key={slot} type="button" onClick={() => handleChange("time", slot)}
-                            className={`py-2.5 rounded-lg text-[11px] font-bold border transition-all duration-150 ${
-                              formData.time === slot
-                                ? "bg-[#DC2626] text-white border-[#DC2626]"
-                                : "bg-white text-gray-500 border-gray-200 hover:border-[#DC2626]/30 hover:text-[#DC2626]"
-                            }`}
-                          >{slot}</button>
-                        ))}
-                      </div>
-                      <Err k="time" />
-                    </div>
-                  </div>
-
                   {/* Brief */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
@@ -278,10 +253,39 @@ export const Contact = () => {
                     Your info is used only to respond to your enquiry. No spam, ever.
                   </p>
                 </form>
-              </div>
+              </div>{/* end form card */}
+
+                {/* What to Expect */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="px-6 py-4 border-b border-gray-100">
+                    <h3 className="font-bold text-gray-900 text-sm">What to Expect</h3>
+                    <p className="text-gray-400 text-xs mt-0.5">My commitment to every client</p>
+                  </div>
+                  <div className="p-6 grid sm:grid-cols-2 gap-3">
+                    {[
+                      "Reply within 24 hours, guaranteed",
+                      "Free project plan & time estimate",
+                      "NDA available on request",
+                      "Clean code — no page builders",
+                      "Remote & on-site work accepted",
+                      "Transparent pricing, no hidden fees",
+                    ].map((label) => (
+                      <div key={label} className="flex items-start gap-2.5">
+                        <div className="w-4 h-4 rounded-full bg-[#DC2626]/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <svg className="w-2.5 h-2.5 text-[#DC2626]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <span className="text-gray-600 text-xs leading-relaxed">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>{/* end left column wrapper */}
 
               {/* SIDEBAR */}
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-5 lg:sticky lg:top-24">
 
                 {/* Direct contact */}
                 <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
@@ -315,76 +319,90 @@ export const Contact = () => {
                         </svg>
                       </a>
                     ))}
-                  </div>
-                </div>
-
-                {/* Availability */}
-                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5">
-                  <div className="flex items-center gap-2 mb-4">
-                    <svg className="w-4 h-4 text-[#DC2626]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                    <h4 className="font-bold text-gray-900 text-sm">Availability</h4>
-                  </div>
-                  <div className="space-y-2.5">
-                    {[
-                      { day: "Mon – Fri",  time: "9 AM – 7 PM IST",  dot: "#DC2626" },
-                      { day: "Saturday",   time: "10 AM – 4 PM IST", dot: "#DC2626" },
-                      { day: "Sunday",     time: "By appointment",   dot: "#D1D5DB" },
-                    ].map(({ day, time, dot }) => (
-                      <div key={day} className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: dot }} />
-                          <span className="text-gray-500 text-xs">{day}</span>
-                        </div>
-                        <span className="text-gray-900 text-xs font-semibold">{time}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <p className="text-gray-400 text-[11px] leading-relaxed">
-                      Responds within <span className="text-[#DC2626] font-bold">3–6 hours</span> during working hours.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Location / Map */}
-                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
-                  <div className="relative w-full" style={{ paddingBottom: "52%" }}>
-                    <iframe
-                      title="Office Location" src={MAPS_EMBED}
-                      className="absolute inset-0 w-full h-full"
-                      style={{ filter: "grayscale(0.2) contrast(1.05)" }}
-                      allowFullScreen loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                    />
-                  </div>
-                  <div className="p-4">
-                    <div className="flex items-start gap-2">
-                      <svg className="w-4 h-4 text-[#DC2626] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      <div>
-                        <p className="text-gray-900 text-xs font-bold mb-0.5">Chennai, India</p>
-                        <p className="text-gray-400 text-[10px] leading-relaxed">{ADDRESS}</p>
-                      </div>
-                    </div>
-                    <a
-                      href="https://maps.google.com/?q=Thiruveethi+Amman+Koil+Street,+Tharamani,+Chennai+600113"
-                      target="_blank" rel="noopener noreferrer"
-                      className="mt-3 flex items-center gap-1.5 text-[11px] text-gray-400 hover:text-[#DC2626] transition-colors duration-200 font-medium"
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(EMAIL).catch(() => {});
+                        setEmailCopied(true);
+                        setTimeout(() => setEmailCopied(false), 2500);
+                      }}
+                      className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-gray-200 text-gray-400 text-xs font-semibold hover:border-[#DC2626]/40 hover:text-[#DC2626] transition-all duration-200"
+                      aria-label="Copy email address"
                     >
-                      Open in Google Maps
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
+                      {emailCopied ? (
+                        <>
+                          <svg className="w-3.5 h-3.5 text-[#DC2626]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span className="text-[#DC2626]">Email copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          Copy email address
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
+
+                {/* Interactive Availability Calendar */}
+                <AvailabilityCalendar onSelect={handleCalendarSelect} />
 
               </div>
             </div>
+
+            {/* ── Full-width map ── */}
+            <div className="mt-7 rounded-2xl border border-gray-200 shadow-sm overflow-hidden bg-white">
+              <div className="lg:grid lg:grid-cols-[1fr_280px] items-stretch">
+                <div className="relative min-h-[200px] lg:min-h-[240px]">
+                  <iframe
+                    title="Office Location"
+                    src={MAPS_EMBED}
+                    className="absolute inset-0 w-full h-full border-0"
+                    style={{ filter: "grayscale(0.15) contrast(1.05)" }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                </div>
+                <div className="p-6 border-t lg:border-t-0 lg:border-l border-gray-100 flex flex-col justify-center gap-5">
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-[#DC2626] flex items-center justify-center flex-shrink-0">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-gray-900 mb-1">Based in Chennai, India</h4>
+                      <p className="text-gray-400 text-[11px] leading-relaxed">{ADDRESS}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2.5">
+                    <a
+                      href="https://maps.google.com/?q=Thiruveethi+Amman+Koil+Street,+Tharamani,+Chennai+600113"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs font-bold text-gray-600 hover:border-[#DC2626]/30 hover:text-[#DC2626] transition-all duration-200"
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                      Open in Google Maps
+                    </a>
+                    <div className="flex items-center justify-center gap-1.5 text-[11px] text-gray-400">
+                      <svg className="w-3.5 h-3.5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      Available for remote &amp; on-site work
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </RevealOnScroll>
       </section>

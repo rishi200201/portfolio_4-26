@@ -1,6 +1,23 @@
+import { useState, useEffect } from "react";
 import { RevealOnScroll } from "../RevealOnScroll";
+import { AnimatedCounter } from "../AnimatedCounter";
+
+const ROLES = ["MERN Stack Developer", "React Specialist", "Node.js Engineer", "Freelance Developer"];
 
 export const Home = ({ onResumeOpen }) => {
+  const [roleIdx, setRoleIdx] = useState(0);
+  const [roleFade, setRoleFade] = useState(true);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setRoleFade(false);
+      setTimeout(() => {
+        setRoleIdx((i) => (i + 1) % ROLES.length);
+        setRoleFade(true);
+      }, 300);
+    }, 2800);
+    return () => clearInterval(id);
+  }, []);
   return (
     <section
       id="home"
@@ -51,8 +68,11 @@ export const Home = ({ onResumeOpen }) => {
 
               {/* Role + stack */}
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-800 tracking-tight leading-snug">
-                  MERN Stack Developer
+                <h2
+                  className="text-xl sm:text-2xl font-bold text-gray-800 tracking-tight leading-snug transition-opacity duration-300"
+                  style={{ opacity: roleFade ? 1 : 0 }}
+                >
+                  {ROLES[roleIdx]}
                 </h2>
                 <p className="text-gray-400 text-sm mt-1 font-medium">
                   React · Node.js · MongoDB · Express
@@ -98,12 +118,14 @@ export const Home = ({ onResumeOpen }) => {
               {/* Stats */}
               <div className="flex items-center gap-8 pt-5 border-t border-gray-100">
                 {[
-                  { num: "2+",    label: "Years Exp." },
-                  { num: "50+",   label: "Projects" },
-                  { num: "100K+", label: "Users Served" },
-                ].map(({ num, label }) => (
+                  { target: 2,   suffix: "+",  label: "Years Exp." },
+                  { target: 50,  suffix: "+",  label: "Projects" },
+                  { target: 100, suffix: "K+", label: "Users Served" },
+                ].map(({ target, suffix, label }) => (
                   <div key={label}>
-                    <div className="text-[1.6rem] font-black text-gray-900 leading-none">{num}</div>
+                    <div className="text-[1.6rem] font-black text-gray-900 leading-none">
+                      <AnimatedCounter target={target} suffix={suffix} />
+                    </div>
                     <div className="text-xs text-gray-400 mt-1 font-medium">{label}</div>
                   </div>
                 ))}

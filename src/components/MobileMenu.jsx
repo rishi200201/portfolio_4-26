@@ -1,4 +1,4 @@
-export const MobileMenu = ({ menuOpen, setMenuOpen, onResumeOpen }) => {
+export const MobileMenu = ({ menuOpen, setMenuOpen, onResumeOpen, theme, onThemeToggle }) => {
   return (
     <div
       className={`fixed inset-0 z-[45] flex flex-col items-center justify-center transition-all duration-300 bg-white md:hidden ${
@@ -27,6 +27,22 @@ export const MobileMenu = ({ menuOpen, setMenuOpen, onResumeOpen }) => {
         </div>
         <span className="font-black text-gray-900 text-base sm:text-lg">Rishi<span className="text-[#DC2626]"> Kumar</span></span>
       </div>
+
+      <button
+        onClick={onThemeToggle}
+        className="absolute top-5 left-4 sm:left-6 w-11 h-11 rounded-xl border border-gray-200 bg-white flex items-center justify-center text-gray-500 hover:text-[#DC2626] hover:border-[#DC2626]/30 transition-all duration-300"
+        aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+      >
+        {theme === "dark" ? (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 3v2.2m0 13.6V21m9-9h-2.2M5.2 12H3m15.164 6.364l-1.556-1.556M7.392 7.392L5.836 5.836m12.328 0l-1.556 1.556M7.392 16.608l-1.556 1.556M12 16a4 4 0 100-8 4 4 0 000 8z" />
+          </svg>
+        ) : (
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M20.354 15.354A9 9 0 018.646 3.646a9.002 9.002 0 1011.708 11.708z" />
+          </svg>
+        )}
+      </button>
 
       <nav className="flex flex-col items-center gap-1 w-full px-4">
         {[

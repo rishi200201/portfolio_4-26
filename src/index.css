@@ -16,17 +16,104 @@ body {
   overscroll-behavior: none;
 }
 
+/* Global shell colors controlled by App theme toggle */
+.theme-shell {
+  background: var(--surface);
+  color: var(--text);
+}
+
 /* White + Red design tokens */
 :root {
   --red: #DC2626;
   --red-dark: #B91C1C;
   --red-light: #FEF2F2;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --surface-soft: #f1f5f9;
+  --card: #ffffff;
+  --card-soft: #f8fafc;
+  --text: #111827;
+  --text-soft: #4b5563;
+  --text-muted: #9ca3af;
+  --line: #e5e7eb;
+  --line-strong: #d1d5db;
   --gray-900: #111827;
   --gray-700: #374151;
   --gray-500: #6B7280;
   --gray-300: #D1D5DB;
   --gray-100: #F3F4F6;
   --gray-50:  #F9FAFB;
+}
+
+html[data-theme="dark"] {
+  --surface: #09090b;
+  --surface-muted: #101015;
+  --surface-soft: #16161d;
+  --card: #121217;
+  --card-soft: #1a1a22;
+  --text: #f3f4f6;
+  --text-soft: #d1d5db;
+  --text-muted: #9ca3af;
+  --line: #2a2a33;
+  --line-strong: #3b3b47;
+}
+
+html[data-theme="dark"] body {
+  background: var(--surface);
+  color: var(--text);
+}
+
+html[data-theme="dark"] .bg-white {
+  background-color: var(--card) !important;
+}
+
+html[data-theme="dark"] .bg-white\/95 {
+  background-color: rgba(18, 18, 23, 0.95) !important;
+}
+
+html[data-theme="dark"] .bg-gray-50 {
+  background-color: var(--surface-muted) !important;
+}
+
+html[data-theme="dark"] .bg-gray-100 {
+  background-color: var(--surface-soft) !important;
+}
+
+html[data-theme="dark"] .bg-gray-900,
+html[data-theme="dark"] .bg-gray-950,
+html[data-theme="dark"] .bg-black {
+  background-color: #060608 !important;
+}
+
+html[data-theme="dark"] .text-gray-900 {
+  color: var(--text) !important;
+}
+
+html[data-theme="dark"] .text-gray-800,
+html[data-theme="dark"] .text-gray-700 {
+  color: #e5e7eb !important;
+}
+
+html[data-theme="dark"] .text-gray-600,
+html[data-theme="dark"] .text-gray-500 {
+  color: var(--text-soft) !important;
+}
+
+html[data-theme="dark"] .text-gray-400,
+html[data-theme="dark"] .text-gray-300 {
+  color: var(--text-muted) !important;
+}
+
+html[data-theme="dark"] .border-gray-100,
+html[data-theme="dark"] .border-gray-200,
+html[data-theme="dark"] .border-gray-300 {
+  border-color: var(--line) !important;
+}
+
+html[data-theme="dark"] .shadow-sm,
+html[data-theme="dark"] .shadow-md,
+html[data-theme="dark"] .shadow-lg {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35) !important;
 }
 
 @layer utilities {
@@ -110,16 +197,39 @@ body {
   .animate-float {
     animation: float 3s ease-in-out infinite;
   }
+
+  @keyframes card-rise {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-card-rise {
+    opacity: 0;
+    animation: card-rise 0.38s ease-out forwards;
+  }
+
+  @keyframes slide-in-right {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
 }
 
 .reveal {
   width: 100%;
   opacity: 0;
-  transform: translateY(20px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
+.reveal--up    { transform: translateY(28px); }
+.reveal--down  { transform: translateY(-28px); }
+.reveal--left  { transform: translateX(36px); }
+.reveal--right { transform: translateX(-36px); }
+
 .reveal.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate(0, 0);
 }

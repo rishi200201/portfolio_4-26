@@ -21,6 +21,16 @@ export const projects = [
     url: "https://5rings.in/",
     badge: "Live",
   },
+   {
+    title: "Royal Enterprises Packaging & Storage",
+    description:
+      "Professional business website showcasing packaging and storage solutions, services, and contact details for Royal Enterprises.",
+    technologies: ["React", "TailwindCSS", "Vercel"],
+    gradient: "from-amber-500 to-yellow-600",
+    iconType: "package",
+    url: "https://royalcratehub.com/",
+    badge: "Live",
+  },
   {
     title: "NVZ Website",
     description:
@@ -29,7 +39,7 @@ export const projects = [
     gradient: "from-indigo-500 to-blue-500",
     iconType: "briefcase",
     url: "https://nivuzzdesign.github.io/NVZ/",
-    badge: "Live",
+    badge: "Hosted",
   },
   {
     title: "Fine Click Photography",
@@ -39,7 +49,7 @@ export const projects = [
     gradient: "from-pink-500 to-rose-500",
     iconType: "camera",
     url: "https://fineclickphotography.github.io/fine_click/",
-    badge: "Live",
+    badge: "Hosted",
   },
   // ── Hosted (Vercel, no custom domain) ────────────────────────────────
   {
@@ -62,16 +72,7 @@ export const projects = [
     url: "https://sri-saravana-store-ch113.vercel.app/",
     badge: "Hosted",
   },
-  {
-    title: "Royal Enterprises Packaging & Storage",
-    description:
-      "Professional business website showcasing packaging and storage solutions, services, and contact details for Royal Enterprises.",
-    technologies: ["React", "TailwindCSS", "Vercel"],
-    gradient: "from-amber-500 to-yellow-600",
-    iconType: "package",
-    url: "http://re-ch113.vercel.app/",
-    badge: "Hosted",
-  },
+ 
 {
   title: "Sivakami Iyarkai Suvai",
   description:
@@ -100,6 +101,14 @@ export const projects = [
     technologies: ["React", "Express.js", "MongoDB", "Stripe"],
     gradient: "from-emerald-500 to-teal-500",
     iconType: "cart",
+    badge: "Personal",
+  }, {
+    title: "Billing System (E-Commerce)",
+    description:
+      "Comprehensive billing system for e-commerce businesses, featuring invoicing, payment tracking, and financial reporting tools.",
+    technologies: ["React", "Express.js", "MongoDB", "Stripe"],
+    gradient: "from-emerald-500 to-teal-500",
+    iconType: "money-bill",
     badge: "Personal",
   },
 ];
